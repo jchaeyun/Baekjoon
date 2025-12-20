@@ -1,0 +1,12 @@
+-- 코드를 작성해주세요
+SELECT
+    ROUND(AVG(B.LENGTH),2) AS AVERAGE_LENGTH
+FROM
+    FISH_INFO A
+INNER JOIN
+    (SELECT
+        ID,
+        IFNULL(LENGTH,10) AS LENGTH
+     FROM
+        FISH_INFO
+        ) B ON B.ID=A.ID
