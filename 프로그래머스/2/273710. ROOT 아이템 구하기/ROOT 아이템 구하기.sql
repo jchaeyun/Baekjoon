@@ -1,0 +1,12 @@
+-- 코드를 작성해주세요
+SELECT
+    Child.ITEM_ID,
+    Child.ITEM_NAME
+FROM
+    ITEM_TREE T
+INNER JOIN
+    ITEM_INFO Child ON Child.ITEM_ID=T.ITEM_ID
+WHERE
+    T.PARENT_ITEM_ID IS NULL
+ORDER BY
+    ITEM_ID ASC
