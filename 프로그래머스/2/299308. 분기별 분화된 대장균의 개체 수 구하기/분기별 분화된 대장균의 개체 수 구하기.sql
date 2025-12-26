@@ -1,0 +1,17 @@
+-- 코드를 작성해주세요
+SELECT
+    CONCAT(QUARTER(DIFFERENTIATION_DATE),'Q') AS QUARTER,
+    COUNT(ID) AS ECOLI_COUNT
+FROM
+    ECOLI_DATA
+GROUP BY
+    QUARTER
+ORDER BY
+    QUARTER ASC
+/*
+QUARTER 함수는 날짜만 넣어주면 알아서 1~4를 반환함
+
+이 함수를 못 쓰는 경우엔
+월을 3으로 나누고 올림(CEIL)을 하면 분기가 됨.
+CEIL(MONTH(DIFFERENTIATION_DATE) / 3)
+*/
