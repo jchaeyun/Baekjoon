@@ -4,6 +4,11 @@
 
 using namespace std;
 
+// 처음 나온거면 ok
+// 저번에 나왔던거면 직전에 나왔는지 확인후, 있으면 ok
+// 저번에 나온건데 직전에 안나왔으면 그룹단어 아님
+// 단어 다 순회했는데 is_group=true면 count++
+
 int main()
 {
     ios::sync_with_stdio(false);
@@ -12,37 +17,39 @@ int main()
     int n;
     cin >> n;
 
-    int count = 0; // 단어 개수 셈
-
+    int count = 0; // 그룹 단어 개수
     for (int i = 0; i < n; i++)
+
     {
+        bool is_group = true; // 그룹 단어인지 여부
+        bool alphabet[26] = {
+            false,
+        }; // 알파벳 방명록
         string s;
         cin >> s;
-        // 맨처음 알파벳 먼저 체크
-        bool check[26] = {false};  // 이 알파벳이 전에 나왔는지 확인 용->for문 안에서 써야 앞단어에서 썼던 기록이 초기화됨!!!
-        check[s[0] - 'a'] = true;  // 문자를 숫자로 변환(인덱스로 씀)
-        bool is_group_word = true; // 일단 그룹단어라고 생각
-
-        for (int j = 1; j < s.length(); j++)
+        for (int j = 0; j < s.length(); j++)
         {
-
-            // 전의 알파벳과 다를때만 검사
-            if (s[j] != s[j - 1])
+            int c = s[j] - 'a';
+            // 처음 나온 알파벳일때 나온거 방명록 체크
+            if (!alphabet[c])
             {
-                if (check[s[j] - 'a'])
+                alphabet[c] = true;
+            } // 저번에 나온 알파벳일 때
+            else
+            {
+                // 연속으로 나온게 아닐때(j=0일땐 무조건 처음나온 알파벳이라 j-1ㄱㅊ)
+                if (s[j] != s[j - 1])
                 {
-                    is_group_word = false;
-                    break; // 연속으로 나온게 아니고 전에 나왔던 알파벳이면 for문 탈출
+                    is_group = false;
+                    break;
                 }
-                check[s[j] - 'a'] = true; // 앞의 글자와 다르고 처음보는 글자면 체크
             }
         }
-        if (is_group_word)
-        {
+        if (is_group)
             count++;
-        }
     }
+
     cout << count;
 
-    // 연속으로 나오거나 처음 나오는건 걍 냅두고 저번에 나왔는데 나오는거만 false
+    return 0;
 }
