@@ -5,38 +5,56 @@
 using namespace std;
 
 string solution(string new_id) {
-    //1.lower
+    string id="";
+    //1
     for(int i=0;i<new_id.length();i++){
         new_id[i]=tolower(new_id[i]);
-    }
-    //2
-    string step2="";
-    for(int i=0;i<new_id.length();i++){  
-        if(isalnum(new_id[i])||new_id[i]=='.'||new_id[i]=='-'||new_id[i]=='_'){
-            step2+=new_id[i];
+        //2
+        if(!(isalnum(new_id[i])==0
+             &&new_id[i]!='-'
+             &&new_id[i]!='_'
+             &&new_id[i]!='.')){
+
+            id+=new_id[i]; //string에서 동적으로 늘어나게 하는법
+
         }
     }
-    new_id=step2;
     
     //3
     size_t pos=0;
-    while((pos=new_id.find(".."))!=string::npos){
-       new_id.replace(pos,2,".");
+    while((pos=id.find("..",pos))!=string::npos){
+        id.replace(pos,2,".");
+        pos=0;
     }
-    //erase
-    if(!new_id.empty()&&new_id.front()=='.') new_id.erase(0,1);
-    if(!new_id.empty()&&new_id.back()=='.') new_id.pop_back();
-    //
-    if(new_id.empty()) new_id+="a";
-    //erase 두번
-    if(new_id.length()>=16) {
-        new_id=new_id.substr(0,15);
-        if(new_id.back()=='.') new_id.pop_back();
+    
+    //4
+    if(!id.empty()&&id.front()=='.'){
+        id=id.substr(1,id.length()-1);
     }
-    if(new_id.length()<=2){
-        while(new_id.length()<3){
-            new_id+=new_id.back();
+    if(!id.empty()&&id.back()=='.'){
+        id=id.substr(0,id.length()-1);
+    }
+    
+    //5
+    if(id.empty()){
+        id+='a';
+    }
+    
+    //6
+    if(id.length()>=16){
+        id=id.substr(0,15);
+        if(id.back()=='.'){
+            id=id.substr(0,14);
+        }
+    }//7
+    else if(id.length()<=2){
+        char word=id.back();
+        while(id.length()<3){
+            id+=word;
         }
     }
-    return new_id;
+    
+    return id;
+    
+    
 }
