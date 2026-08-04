@@ -3,28 +3,32 @@
 
 using namespace std;
 
-void dfs(vector<int> &numbers, int target,int index,int sum,int &answer){
-    
-    if(numbers.size()==index){
-        if(target==sum){
-            answer++;
-            return;
+void dfs(vector<int> & numbers, int target,int &answer,int sum,int count){
+   
+    //멈추는 조건
+       if(count==numbers.size()){
+           if(sum==target){
+            answer++; 
+            
         }
-        
+         
         return;
-    }
+       }
     
-    dfs(numbers,target,index+1,sum+numbers[index],answer);
+        dfs(numbers,target,answer,sum-numbers[count],count+1);
+        
+        
+        dfs(numbers,target,answer,sum+numbers[count],count+1);
+        
     
-    dfs(numbers,target,index+1,sum-numbers[index],answer);
+    return;
 }
 
 int solution(vector<int> numbers, int target) {
-    int index=0;
-    int answer=0;
     int sum=0;
-    
-    dfs(numbers,target,index,sum,answer);
+    int answer=0;
+    int count=0;
+    dfs(numbers,target,answer,sum,count);
     
     return answer;
 }
