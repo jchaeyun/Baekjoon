@@ -5,49 +5,46 @@
 using namespace std;
 
 vector<int> solution(vector<int> fees, vector<string> records) {
-    map<int,int> m;
-    map<int,int> in;
-    vector<int> result;
     
-    //시각을 숫자로 바꿈
+    map<int,int> inTime;
+    map<int,int> totalTime;
+    vector<int> answer;
+    
     for(int i=0;i<records.size();i++){
-        int hour=stoi(records[i].substr(0,2)); //시
-        int min=stoi(records[i].substr(3,2)); //분
-        int car=stoi(records[i].substr(6,4)); //차량번호
-        string inout=records[i].substr(11); //O 또는 I
-        
-        int time=hour*60+min;
-        
-        
-        if(inout=="IN"){
-            in[car]=time;
+        size_t pos=0;
+        int carNum=stoi(records[i].substr(6,4));
+        int time=stoi(records[i].substr(0,2))*60+stoi(records[i].substr(3,2));
+            
+        if((pos=records[i].find("IN"))!=string::npos){
+            inTime[carNum]=time;
         }else{
-            m[car]+=time-in[car];
-            in.erase(car);
-        }
-        
-        
-    }
-    
-    for(auto p:in){
-        //out이 없어서 in에 남아있는 경우(앞에서 out하면 erase함)
-        
-            m[p.first]+=1439-p.second;
-        
-    }
-    
-    
-    
-    //180분 이하,이상 나눠서 요금 구함
-    for(auto p:m){
-        
-        
-        if(p.second<=fees[0]){
-            result.push_back(fees[1]);
-        }else{
-            int total=fees[1]+((p.second-fees[0]+fees[2]-1)/fees[2])*fees[3];
-            result.push_back(total);
+            
+            int total=time-inTime[carNum];
+            totalTime[carNum]+=total;
+            inTime.erase(carNum);
         }
     }
-    return result;
+    
+   
+    
+    for(auto [carNum, time]:inTime){
+        int total=23*60+59-time;
+        totalTime[carNum]+=total;
+        
+    }
+    
+    //요금 계산
+     for(auto [carNum, total]:totalTime){
+        if(totalTime[carNum]>fees[0]){
+            int extra=total-fees[0];
+            int unit=(extra+fees[2]-1)/fees[2]; 
+            int fee=unit*fees[3]+fees[1];
+            answer.push_back(fee);
+            
+        }else{
+            answer.push_back(fees[1]);
+        }
+    }
+  
+    return answer;
 }
