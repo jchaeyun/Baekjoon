@@ -5,28 +5,18 @@
 using namespace std;
 
 vector<int> solution(vector<int> numbers) {
-    stack<int> stk;
-    vector<int> ans(numbers.size(),-1);
-    
-    
-    for(int i=0;i<numbers.size()-1;i++){
-        if(numbers[i]>=numbers[i+1]){
-            stk.push(i); //바로 다음 숫자가 답이 아닌건 일단 스택에 넣어둠
-        }else{
-            ans[i]=numbers[i+1];
-        }
-        
-        
-            while(!stk.empty() &&(numbers[stk.top()]<numbers[i+1])){
-                ans[stk.top()]=numbers[i+1];
-                stk.pop();
-            }
-        
+    //2담고 3이 2보다 크면 3담고 똑같거나 작으면 스택에 넣고 
+    stack<pair<int,int>> stk;
+    vector<int> answer(numbers.size(),-1);
+    for(int i=0;i<numbers.size();i++){
+        while(!stk.empty()&&stk.top().second<numbers[i]){
+            answer[stk.top().first]=numbers[i];
+            stk.pop();
             
-                
+        }
+            
+        stk.push({i,numbers[i]});
     }
     
-    
-    
-    return ans;
+    return answer;
 }
