@@ -3,32 +3,39 @@
 
 using namespace std;
 
-void dfs(vector<int> & numbers, int target,int &answer,int sum,int count){
-   
-    //멈추는 조건
-       if(count==numbers.size()){
-           if(sum==target){
-            answer++; 
-            
+int cnt=0;
+
+void dfs(int answer,const vector<int>& numbers,int target,int idx){
+    if(idx==numbers.size()){
+        if(answer==target){
+        cnt++;
+        
         }
-         
         return;
-       }
+    }
     
-        dfs(numbers,target,answer,sum-numbers[count],count+1);
-        
-        
-        dfs(numbers,target,answer,sum+numbers[count],count+1);
-        
     
-    return;
+   
+        //덧셈
+        dfs(answer+numbers[idx],numbers,target,idx+1);
+        //뺄셈
+        dfs(answer-numbers[idx],numbers,target,idx+1);
+
+    
+  
+    
+    
 }
 
 int solution(vector<int> numbers, int target) {
-    int sum=0;
-    int answer=0;
-    int count=0;
-    dfs(numbers,target,answer,sum,count);
+   //개수가 작다...완전탐색
+   //dfs
+    //더하고 
     
-    return answer;
+    int answer=0;
+     
+    dfs(answer,numbers,target,0);
+     
+    
+    return cnt;
 }
