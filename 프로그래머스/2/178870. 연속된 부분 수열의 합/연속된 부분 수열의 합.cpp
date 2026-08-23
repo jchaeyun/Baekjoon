@@ -6,37 +6,40 @@ using namespace std;
 vector<int> solution(vector<int> sequence, int k) {
     int left=0;
     int right=0;
-    int sum=sequence[0];
-    int answerleft=0;
-    int answerright=sequence.size()-1;
- 
-    
-    while(left<=right&&right<sequence.size()){
-       
+    vector<int> v;
+    v.push_back(left);
+    v.push_back(right);
+     int sum=sequence[left];
+    int mindist=sequence.size();
+    while(right<sequence.size()&&left<=right){
         if(sum==k){
-            if(right-left<answerright-answerleft){
-                answerleft=left;
-                answerright=right;
+            if(mindist>right-left){//거리가 짧을때만 갱신
+                mindist=right-left;
+                v.pop_back();
+                v.pop_back();
+                v.push_back(left);
+                v.push_back(right);
+                
             }
-            sum-=sequence[left];
+            sum-=sequence[left];    
             left++;
             
             
+            
+          
+        }
+        else if(sum>k){
+            sum-=sequence[left];
+            left++;
+            
+        }else{
+            right++;
+            sum+=sequence[right];
+           
+            
         }
         
-        else if(sum<k){
-            right++;
-            if(right<sequence.size()){
-                sum+=sequence[right];
-            }
-        }else{
-            sum-=sequence[left];
-            left++;  
-        }
     }
     
-    
-    
-    return {answerleft,answerright};
-    
+    return v;
 }
