@@ -2,40 +2,31 @@
 #include <vector>
 
 using namespace std;
+int answer=0;
 
-int cnt=0;
-
-void dfs(int answer,const vector<int>& numbers,int target,int idx){
-    if(idx==numbers.size()){
-        if(answer==target){
-        cnt++;
+void dfs(const vector<int>& numbers,int target,int cnt,int i){
         
+        if(i==numbers.size()){
+            if(cnt==target) {
+            answer++;
+            }
+            return;
         }
-        return;
-    }
+        
+        dfs(numbers,target,cnt+numbers[i],i+1);
+        dfs(numbers,target,cnt-numbers[i],i+1);
     
-    
-   
-        //덧셈
-        dfs(answer+numbers[idx],numbers,target,idx+1);
-        //뺄셈
-        dfs(answer-numbers[idx],numbers,target,idx+1);
-
-    
-  
     
     
 }
 
 int solution(vector<int> numbers, int target) {
-   //개수가 작다...완전탐색
-   //dfs
-    //더하고 
+    //종료조건:타겟넘버될때 기록
+    int cnt=0;
     
-    int answer=0;
-     
-    dfs(answer,numbers,target,0);
-     
+        dfs(numbers,target,cnt+numbers[0],1);
+        dfs(numbers,target,cnt-numbers[0],1);
     
-    return cnt;
+    
+    return answer;
 }
