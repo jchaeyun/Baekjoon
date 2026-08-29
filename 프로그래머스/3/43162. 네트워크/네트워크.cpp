@@ -2,32 +2,37 @@
 #include <vector>
 
 using namespace std;
-void dfs(int current,vector<vector<int>> &computers,vector<bool> &visited){
-   
-    visited[current]=true;
+int net=0;
+void dfs(int cur,const vector<vector<int>>& computers,vector<bool>& connected){ 
     
-    for(int next=0;next<computers.size();next++){
-        if(computers[current][next]==1&&!visited[next]){
-            dfs(next,computers,visited);
+    connected[cur]=true;
+    
+        for(int i=0;i<computers.size();i++){
+            if(connected[i]) continue;
+            
+             if(computers[cur][i]){ //연결된 컴퓨터 찾음
+            dfs(i,computers,connected); //연결된 다른 컴퓨터 찾음
+            }
+    
         }
-    }
-        
-        
-    
-    
+       
+    //연결된 컴퓨터 찾기 실패
     return;
+    
 }
 int solution(int n, vector<vector<int>> computers) {
-    vector<bool> visited(computers.size(),false);
-    int count=0;
+  //dfs 바닥을 찍으면 ans++
+   
+    vector<bool> connected(n,false);
+  
+    int net=0;
     
-    for(int i=0;i<computers.size();i++){
-            
-            if(!visited[i]){
-                count++;
-                dfs(i,computers,visited);
-            }
-        }
+    for(int i=0;i<n;i++){
+        if(connected[i]) continue;
+        dfs(i,computers,connected);
+        net++;
+    }
     
-    return count;
+    return net;
+    
 }
