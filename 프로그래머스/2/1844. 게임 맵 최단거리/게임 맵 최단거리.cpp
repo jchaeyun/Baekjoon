@@ -1,54 +1,39 @@
 #include<vector>
 #include <queue>
 using namespace std;
-int bfs(int r,int c,vector<vector<int> >& maps,vector<vector<int> >& dist){
-    int n=maps.size();
-    int m=maps[0].size();
+
+int solution(vector<vector<int> > maps)
+{
+    //maps가 1이면 가능, 0이면 못감
+    int dy[4]={-1,1,0,0};
+    int dx[4]={0,0,-1,1};
+    
+    int n=maps.size(); //행 개수
+    int m=maps[0].size(); //열 개수
     queue<pair<int,int>> q;
+    vector<vector<bool>> visited(n,vector<bool>(m,false));
+    vector<vector<int>> dist(n,vector<int>(m,-1));
+    q.push({0,0});
+    dist[0][0]=1;
     
-    int br[4]={-1,1,0,0};
-    int bc[4]={0,0,-1,1};
-    
-    maps[r][c]=0;
-    q.push({r,c});
     
     while(!q.empty()){
         
-        int currentR=q.front().first;
-        int currentC=q.front().second;
-        q.pop();
-        
-    for(int i=0;i<4;i++){
-        int nr=currentR+br[i];
-        int nc=currentC+bc[i];
-        
-        if(nr<0|| nr>=n||nc<0||nc>=m) continue;
-          
-         
-        
-        if(maps[nr][nc]==1){
-               dist[nr][nc]=dist[currentR][currentC]+1; //거리 기록
-               maps[nr][nc]=0;
-               q.push({nr,nc});
-            if(nr==n-1&&nc==m-1) return dist[n-1][m-1];
-         }
+        auto [y,x]=q.front(); q.pop();
+        for(int i=0;i<4;i++){
+            int ny=y+dy[i];
+            int nx=x+dx[i];
+            
+            if(ny>=n||ny<0||nx>=m||nx<0||maps[ny][nx]==0) continue;
+            if(visited[ny][nx]) continue;
+            visited[ny][nx]=true;
+            dist[ny][nx]=dist[y][x]+1;
+            if(ny==n-1&&nx==m-1) return dist[n-1][m-1];
+            q.push({ny,nx});
+            
+            
+        }
     }
-          
-        
-    }
-    
     return -1;
     
-    
-}
-
-int solution(vector<vector<int> > maps)
-{   
-    int r=0;
-    int c=0;
-    vector<vector<int> > dist(maps.size(),vector<int>(maps[0].size(),0));
-    dist[0][0]=1;
-    int answer=bfs(r,c,maps,dist);
-    
-    return answer;
 }
