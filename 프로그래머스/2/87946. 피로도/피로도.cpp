@@ -2,36 +2,38 @@
 #include <vector>
 
 using namespace std;
-
-int answer=0;
-
-void dfs(int k, const vector<vector<int>>& dungeons,vector<bool>&visited,int cnt){
-    
-    answer=max(cnt,answer); //최대 던전 수 기록. cnt는 지난 경로의 던전 수, answer는 지금까지 최대 던전 수
-    
-    if(k<=0) return; //종료 조건
-    
-    //다음에 방문할 던전 고르기
+int ans=0;
+void dfs(int k,const vector<vector<int>>& dungeons,int cnt,vector<bool>& visited){
+    //종료조건:k가 0 이하일때
+    if(k<=0){
+        return;
+    }
+    //모든 곳을 체크함(순서가 다르면 다른 루트이므로)
     for(int i=0;i<dungeons.size();i++){
-        
-        if(visited[i]) continue;
-        
-        if(k>=dungeons[i][0]){
+        if(!visited[i]&&(k>=dungeons[i][0])){
             visited[i]=true;
-            dfs(k-dungeons[i][1],dungeons,visited,cnt+1);
+            dfs(k-dungeons[i][1],dungeons,cnt+1,visited);
             visited[i]=false;
         }
-        
     }
+    ans=max(ans,cnt);
 }
 
 int solution(int k, vector<vector<int>> dungeons) {
-    //완전탐색 순열
-   
-    int cnt=0;
-    vector<bool> visited(dungeons.size(),false);
     
-    dfs(k,dungeons,visited,cnt);
     
-    return answer;
+    // 시작점은 다양하게(가능한 모든 점에서 시작)
+    for(int i=0;i<dungeons.size();i++){
+        int cnt=0;
+        vector<bool> visited(dungeons.size(),false);
+        if(k>=dungeons[i][0]){
+            visited[i]=true;
+            dfs(k-dungeons[i][1],dungeons,cnt+1,visited);
+            visited[i]=false;
+        }
+       
+    }
+    
+    return ans;
+  
 }
