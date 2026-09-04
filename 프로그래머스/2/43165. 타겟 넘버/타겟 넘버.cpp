@@ -4,29 +4,23 @@
 using namespace std;
 int answer=0;
 
-void dfs(const vector<int>& numbers,int target,int cnt,int i){
-        
-        if(i==numbers.size()){
-            if(cnt==target) {
-            answer++;
-            }
-            return;
-        }
-        
-        dfs(numbers,target,cnt+numbers[i],i+1);
-        dfs(numbers,target,cnt-numbers[i],i+1);
+void dfs(const vector<int>& numbers,int target,int start,int sum){
+    if(start==numbers.size()){
+        if(sum==target){answer++;} 
+        return;
+    } 
     
     
+        dfs(numbers,target,start+1,sum+numbers[start]);
+        dfs(numbers,target,start+1,sum-numbers[start]);
     
+    
+  return;
 }
-
 int solution(vector<int> numbers, int target) {
-    //종료조건:타겟넘버될때 기록
-    int cnt=0;
-    
-        dfs(numbers,target,cnt+numbers[0],1);
-        dfs(numbers,target,cnt-numbers[0],1);
-    
+        int sum=0;
+        dfs(numbers,target,1,sum+numbers[0]);
+        dfs(numbers,target,1,sum-numbers[0]);
     
     return answer;
 }
